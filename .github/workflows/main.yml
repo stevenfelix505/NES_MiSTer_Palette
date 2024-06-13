@@ -24,7 +24,7 @@ jobs:
       - name: Create ${{ env.ZIP }} with the relevant files
         run: >
           zip ${{ env.ZIP }}
-          Palette
+          Palette/
         
       - name: Update ${{ env.TAG }} tag to current commit
         # equivalent to EndBug/latest-tag@latest but simpler
