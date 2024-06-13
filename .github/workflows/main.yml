@@ -1,0 +1,39 @@
+# Create a zip file with the NES palettes
+name: Create zip file with NES palettes
+# When pushing to the master branch
+on:
+  push:
+    branches:
+      - master
+
+
+# parameters
+env:
+  TAG: latest
+  ZIP: NES_palette.zip
+
+
+# Workflow in ubuntu
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the repository files
+        uses: actions/checkout@v3
+
+      - name: Create ${{ env.ZIP }} with the relevant files
+        run: >
+          zip ${{ env.ZIP }}
+          Palette
+        
+      - name: Update ${{ env.TAG }} tag to current commit
+        # equivalent to EndBug/latest-tag@latest but simpler
+        run: |
+          git tag --force ${{ env.TAG }}
+          git push --force origin tag ${{ env.TAG }}
+          
+      - name: Upload ${{ env.ZIP }} to ${{ env.TAG }} release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.TAG }}
+          files: ${{ env.ZIP }}
